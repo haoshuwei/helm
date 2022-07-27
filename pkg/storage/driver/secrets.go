@@ -80,13 +80,22 @@ func (secrets *Secrets) Get(key string) (*rspb.Release, error) {
 // that filter(release) == true. An error is returned if the
 // secret fails to retrieve the releases.
 func (secrets *Secrets) List(filter func(*rspb.Release) bool) ([]*rspb.Release, error) {
-	lsel := kblabels.Set{"owner": "helm", "status": "deployed"}.AsSelector()
-	opts := metav1.ListOptions{LabelSelector: lsel.String()}
+	lsel01 := kblabels.Set{"owner": "helm", "status": "deployed"}.AsSelector()
+	opts01 := metav1.ListOptions{LabelSelector: lsel01.String()}
 
-	list, err := secrets.impl.List(context.Background(), opts)
+	list, err := secrets.impl.List(context.Background(), opts01)
 	if err != nil {
 		return nil, errors.Wrap(err, "list: failed to list")
 	}
+	lsel02 := kblabels.Set{"owner": "helm", "status": "failed"}.AsSelector()
+	opts02 := metav1.ListOptions{LabelSelector: lsel02.String()}
+
+	list02, err := secrets.impl.List(context.Background(), opts02)
+	if err != nil {
+		return nil, errors.Wrap(err, "list: failed to list")
+	}
+
+	list.Items = append(list.Items, list02.Items...)
 	fmt.Printf("tag3.1 %v\n", time.Now())
 	fmt.Printf("tag3.1 %v\n", len(list.Items))
 
