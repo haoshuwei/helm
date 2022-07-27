@@ -147,8 +147,6 @@ func NewList(cfg *Configuration) *List {
 
 // Run executes the list command, returning a set of matches.
 func (l *List) Run() ([]*release.Release, error) {
-	fmt.Printf("tag0 %v\n", l)
-	fmt.Printf("tag0 %v\n", l.StateMask)
 	fmt.Printf("tag1 %v\n", time.Now())
 	if err := l.cfg.KubeClient.IsReachable(); err != nil {
 		return nil, err
@@ -219,7 +217,7 @@ func (l *List) Run() ([]*release.Release, error) {
 		last = l
 	}
 	results = results[l.Offset:last]
-	fmt.Printf("tag4 %v\n", time.Now())
+	fmt.Printf("tag5 %v\n", time.Now())
 
 	return results, err
 }
