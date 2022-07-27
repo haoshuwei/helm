@@ -80,7 +80,7 @@ func (secrets *Secrets) Get(key string) (*rspb.Release, error) {
 // that filter(release) == true. An error is returned if the
 // secret fails to retrieve the releases.
 func (secrets *Secrets) List(filter func(*rspb.Release) bool) ([]*rspb.Release, error) {
-	lsel := kblabels.Set{"owner": "helm"}.AsSelector()
+	lsel := kblabels.Set{"owner": "helm", "status": "deployed"}.AsSelector()
 	opts := metav1.ListOptions{LabelSelector: lsel.String()}
 
 	list, err := secrets.impl.List(context.Background(), opts)
